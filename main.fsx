@@ -45,3 +45,47 @@ module CollectionsFunc =
         |> Array.skip 1
         |> Array.filter isValid
         |> Array.map float // iter through elems and use func tp all elements
+        
+// 5. Record Types
+module RecordTypes = // module - combine functions that have something common (record type)
+    open System
+    type Student =
+            {
+                Name : string
+                ID : string
+                MeanScore : float
+            }
+    let fromString (s:string) =
+        let name = "Maksim"
+        let id = "Maksim199"
+        let meanScore = 6.7
+        {
+            Name = name
+            ID = id
+            MeanScore = meanScore
+        }
+// 6. Missing data
+module MissingData =
+    // fn that try parse from string
+    let tryFromString (s:string) =
+        if s = "N/A" then
+            None
+        else
+            Some (float s) // array.choose using when we use Option type (Some)
+    let fromStringOr d s =
+        s
+        |> tryFromString
+        |> Option.defaultValue d  // default value
+
+// 7. args and params
+// TODO: need to get a better handle on the currying
+module ArgsAndParams =
+    let multipleParams (i:int) (s:string) : string = // use i int s string and return string
+        let elements = s.Split(',')
+        elements.[i].Trim()
+    let tupledParams (a,b) =
+        a + b
+    let sumAB a b =
+        a + b
+    let sumA3  = // curried func, using only part of args
+        sumAB 3
