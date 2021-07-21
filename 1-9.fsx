@@ -2,9 +2,6 @@
 
 // 1. Conditional branching
 
-open Main.PatternMatching
-open Microsoft.VisualBasic.FileIO
-
 module Conditional = 
     let conditionalBranching (argv:string[]) = 
         let simpleString = argv.[0] // first element of argv array
@@ -111,14 +108,15 @@ module DUs =
         elif s = "D" then
             Delete
         else
-            let val = s |> string
-            Update val
+            let value = s |> string
+            Update value
         
-        let tryParseResult (operations : Operations) =
-            match operations with
+    let tryParseResult (operations : Operations) =
+        match operations with
             | Insert -> Some "Insert COMMAND"
             | Delete -> Some "Delete COMMAND"
-            | Update val -> Some val
+            | Update operations -> Some operations
+            
 
 // 9. Pattern matching
 module PatternMatching =
