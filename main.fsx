@@ -1,6 +1,10 @@
 // Notes during FSharp learning
 
 // 1. Conditional branching
+
+open Main.PatternMatching
+open Microsoft.VisualBasic.FileIO
+
 module Conditional = 
     let conditionalBranching (argv:string[]) = 
         let simpleString = argv.[0] // first element of argv array
@@ -89,3 +93,68 @@ module ArgsAndParams =
         a + b
     let sumA3  = // curried func, using only part of args
         sumAB 3
+
+
+// 8. DUs
+module DUs =
+
+    // If need to update operations type and we add additional type (create)
+    // then compiler inform us that we need to update our "match" function
+    type Operations =
+        | Insert
+        | Delete
+        | Update of string
+    
+    let fromString (s:string) =
+        if s = "I" then
+            Insert
+        elif s = "D" then
+            Delete
+        else
+            let val = s |> string
+            Update val
+        
+        let tryParseResult (operations : Operations) =
+            match operations with
+            | Insert -> Some "Insert COMMAND"
+            | Delete -> Some "Delete COMMAND"
+            | Update val -> Some val
+
+// 9. Pattern matching
+module PatternMatching =
+    
+    let numOfCars n =
+        match n with
+        | 1 -> "One car"
+        | 2 -> "Two cars"
+        | _ -> $"%i{n} cars" //default case. Wildcard pattern, that matches anything
+    
+    module OptionType =
+        let describe x =
+            match x with
+            | Some v -> sprintf "Value was %O" v // %O - non type-specific format spec 
+            | None -> sprintf "No value"
+        // test module
+    printfn "---"
+    printfn "%s" (Some 99 |> OptionType.describe)
+    printfn "%s" (Some "abc" |> OptionType.describe)
+    printfn "%s" (Some None |> OptionType.describe)
+    
+    module Arrays =
+        let describe a =
+            match a  with
+            | [||] -> "Empty"
+            | [|x|] -> sprintf "Array with one element %O" x
+            | [|x;y|] -> sprintf "Array with two elements %O %O" x y
+            | _ -> sprintf "Array with %i elements." a.Length
+        
+        let anonRecordTypes (s:string) =
+            let vals = s.Split(',')
+            match vals with
+            | [|x;y|] ->
+                {|X = x.Trim()
+                  Y = y.Trim()|}
+            | [|x|] ->
+                {|X = x.Trim()
+                  Y = "NONE"|}
+            | _ -> raise (System.FormatException(sprintf "Invalid format : %s" s))
